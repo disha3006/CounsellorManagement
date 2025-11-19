@@ -57,7 +57,9 @@
 
                     <h4 class="text-center mb-4 text-primary">Login to Your Account</h4>
 
-                    <form th:action="@{/login}" th:object="${userForm}" method="post">
+                    <form th:action="@{/login}"
+                          th:object="${userForm}"
+                          method="post">
 
                         <div class="mb-3">
                             <label class="form-label">Email Address</label>

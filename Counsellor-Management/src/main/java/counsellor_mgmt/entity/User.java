@@ -12,17 +12,27 @@ public class User {
 
     private String name;
 
+    private String phone;
+
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    private String role;
+
     @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
     private String passwordHash;
 
-    private String phone;
+    public String getRole() {
+        return role;
+    }
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+    public void setRole(String role) {
+        this.role = role;
+    }
 
-    // Getters and Setters
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

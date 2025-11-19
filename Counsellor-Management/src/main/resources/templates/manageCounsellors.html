@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Counsellors</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body { background-color: #f5f7fa; }
+        .card { border-radius: 12px; }
+        textarea { resize: none; }
+        .status-badge { font-size: 0.85rem; }
+    </style>
+</head>
+
+<body>
+
+<div class="container mt-5">
+
+    <h2 class="text-center mb-4 fw-bold">Manage Counsellors</h2>
+
+    <div class="card p-4 shadow-sm"
+         th:if="${session.loggedUserRole == 'ADMIN'}">
+
+        <table class="table table-hover align-middle">
+            <thead class="table-primary text-center">
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Active Enquiries</th>
+                <th>Closed Enquiries</th>
+                <th>Send Comment</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="c : ${counsellors}" class="text-center">
+
+                <td class="fw-semibold"
+                    th:text="${c.name}">
+                </td>
+
+
+                <td th:text="${c.email}">
+                </td>
+
+                <td>
+                    <span class="badge bg-info fs-6"
+                          th:text="${c.activeCount}">
+                    </span>
+                </td>
+
+                <td>
+                    <span class="badge bg-secondary fs-6"
+                          th:text="${c.closedCount}">
+                    </span>
+                </td>
+
+
+                <td style="width: 20%;">
+                    <form th:action="@{/counsellor/comment}"
+                          method="post"
+                          class="d-flex flex-column gap-2">
+                        <input type="hidden" name="counsellorId" th:value="${c.id}"/>
+
+                        <textarea class="form-control" name="comment"
+                                  rows="2" placeholder="Write a message..." required></textarea>
+
+                        <button class="btn btn-primary btn-sm" type="submit">Send</button>
+                    </form>
+                </td>
+
+                <td>
+                    <form th:action="@{/deletecounsellor}" method="post" class="d-inline">
+                        <input type="hidden" name="counsellorId" th:value="${c.id}">
+                        <button class="btn btn-sm btn-outline-danger">Remove</button>
+                    </form>
+
+                </td>
+
+            </tr>
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -30,27 +30,43 @@ public class AuthController {
 
     @PostMapping("/register")
     public String registerUser(@ModelAttribute("userForm") User user, RedirectAttributes ra) {
+
         if (userRepo.findByEmail(user.getEmail()).isPresent()) {
             return "redirect:/register";
         }
+
+        user.setRole("COUNSELLOR");  //this role will be default for the registration. if u want admin role to be set, use db.
         userRepo.save(user);
         return "redirect:/login";
     }
 
+
     @PostMapping("/login")
     public String doLogin(@ModelAttribute("userForm") User formUser,
                           HttpSession session) {
+
         Optional<User> optUser = userRepo.findByEmail(formUser.getEmail());
 
         if (optUser.isPresent() && optUser.get().getPasswordHash().equals(formUser.getPasswordHash())) {
-            session.setAttribute("loggedUserId", optUser.get().getId());
-            session.setAttribute("loggedUserName", optUser.get().getName());
+
+            User u = optUser.get();
+
+            session.setAttribute("loggedUserId", u.getId());
+            session.setAttribute("loggedUserName", u.getName());
+            session.setAttribute("loggedUserRole", u.getRole());
+
             return "redirect:/dashboard";
-        } else {
-            return "redirect:/login";
         }
+        return "redirect:/login";
     }
 
+
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/login";
+    }
 
 
 }
